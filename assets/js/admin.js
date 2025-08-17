@@ -2,7 +2,7 @@ import { db } from './firebase-init.js';
 import { collection, doc, setDoc, getDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ===== PASTE MO DITO ANG IYONG WEB APP URL MULA SA APPS SCRIPT =====
-const APPS_SCRIPT_WEB_APP_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwxEwuFy0siBB2ZFE_QJi4I_sXxjzwHuhxEB5qdfWIpYv1CAd1-fe0zrDA5v9fNL9VRNA/exec";
 // ====================================================================
 
 // ================== CONFIG & DEFAULTS ==================
