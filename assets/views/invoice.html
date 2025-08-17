@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Invoice</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script> <link rel="stylesheet" href="./assets/css/invoice.css">
+  <link rel="icon" type="image/png" href="./assets/images/mc.png"/>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins','ui-sans-serif','system-ui'] },
+          colors: { brand: {600:'#1f6be6',700:'#1a57bf'} },
+          backgroundImage:{ 'brand-gradient':'linear-gradient(135deg,#1a57bf 0%,#1f6be6 45%,#55a7ff 100%)' }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+
+  <div class="page-controls print-hide">
+    <button id="printBtn" class="action-btn">
+      <i data-lucide="printer" class="w-5 h-5 mr-2"></i> Print Invoice
+    </button>
+    <button id="downloadBtn" class="action-btn">
+      <i data-lucide="download" class="w-5 h-5 mr-2"></i> Download as PDF
+    </button>
+     <a href="./assets/views/admin.html" class="action-btn back-btn">
+      <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i> Go Back to Admin
+    </a>
+  </div>
+
+  <div id="invoice-container" class="invoice-container">
+    <div id="invoice-sheet" class="invoice-sheet">
+      <div class="header-section">
+        <div class="flex items-center gap-3">
+          <div class="bg-brand-gradient text-white p-3 rounded-xl flex items-center gap-3 shadow-lg">
+            <img src="./assets/images/mc.png" class="logo-on-header w-10 h-10" alt="Logo">
+            <div id="pCompanyName" class="font-bold text-xl">Your Company</div>
+          </div>
+        </div>
+        <h2 class="text-3xl font-bold tracking-wider text-slate-700 dark:text-slate-300">INVOICE</h2>
+      </div>
+
+      <div class="details-section">
+        <div class="space-y-4">
+          <div>
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400">Invoice Number</div>
+            <div id="pInv" class="font-medium break-words text-sm">—</div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400">Bill To</div>
+            <div id="pBill" class="whitespace-pre-wrap font-medium break-words text-sm">—</div>
+          </div>
+        </div>
+        <div class="space-y-4 text-left">
+          <div>
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400">Date Issued</div>
+            <div id="pDate" class="font-medium break-words text-sm">—</div>
+            <div id="pTime" class="opacity-70 text-xs">—</div>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-slate-500 dark:text-slate-400">Recipient</div>
+            <div id="pRecipient" class="whitespace-pre-wrap font-medium break-words text-sm">—</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex-grow">
+        <table class="w-full text-sm table-fixed">
+          <thead>
+            <tr class="border-b-2 border-slate-200 dark:border-slate-700">
+              <th class="text-left font-semibold p-2 pb-2 w-2/5 text-xs text-slate-500">DESCRIPTION</th>
+              <th class="text-right font-semibold p-2 pb-2 text-xs text-slate-500">RATE</th>
+              <th class="text-right font-semibold p-2 pb-2 text-xs text-slate-500">QTY</th>
+              <th class="text-right font-semibold p-2 pb-2 text-xs text-slate-500">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody id="pItems" class="divide-y divide-slate-200 dark:divide-slate-700"></tbody>
+        </table>
+      </div>
+      
+      <div class="invoice-footer">
+         <div class="p-6 grid grid-cols-2 gap-6 bg-slate-50 dark:bg-slate-800/40 rounded-lg">
+            <div class="text-sm">
+                <div class="font-bold mb-2 text-slate-600 dark:text-slate-400">Payment Information</div>
+                <div id="pPayment" class="whitespace-pre-wrap opacity-80 break-words">—</div>
+            </div>
+            <div class="text-sm text-right">
+                <div class="w-full space-y-1">
+                    <div class="flex justify-between gap-4"><span class="text-slate-600 dark:text-slate-400">Subtotal</span><span id="pSub" class="font-medium break-words text-right min-w-0">₱0.00</span></div>
+                    <div class="flex justify-between gap-4"><span class="text-slate-600 dark:text-slate-400">Tax</span><span id="pTax" class="font-medium break-words text-right min-w-0">₱0.00</span></div>
+                    <div class="flex justify-between gap-4"><span class="text-slate-600 dark:text-slate-400">Discount</span><span id="pDis" class="font-medium break-words text-right min-w-0">₱0.00</span></div>
+                    <div class="flex justify-between gap-4"><span class="text-slate-600 dark:text-slate-400">Downpayment</span><span id="pDP" class="font-medium break-words text-right min-w-0">₱0.00</span></div>
+                    <div class="flex justify-between font-bold text-base mt-2 pt-2 border-t border-slate-300 dark:border-slate-700"><span>Amount Due</span><span id="pDue" class="break-words text-right min-w-0">₱0.00</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="p-6 grid grid-cols-2 gap-6 border-t border-slate-200 dark:border-slate-700">
+            <div class="text-sm">
+                <div class="font-bold mb-2 text-slate-600 dark:text-slate-400">Notes</div>
+                <div id="pNotes" class="whitespace-pre-wrap opacity-80 break-words">—</div>
+            </div>
+            <div class="flex flex-col items-end justify-end">
+                <div class="font-bold text-xs mb-2 text-slate-600 dark:text-slate-400">Scan to Verify</div>
+                <div class="w-32 h-32 rounded-lg bg-white p-2 flex items-center justify-center shadow-inner">
+                    <img id="pQR" alt="QR Code" src="" style="display:none;"/>
+                </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="error-msg" class="hidden text-center p-8">
+    <i data-lucide="alert-triangle" class="w-16 h-16 mx-auto text-amber-500"></i>
+    <h1 class="mt-4 text-2xl font-bold text-red-600">Invoice Not Found</h1>
+    <p class="text-slate-500 mt-2">The link may be invalid or the invoice has been deleted.</p>
+  </div>
+  
+  <script src="./assets/js/data.js"></script>
+  <script src="./assets/js/invoice.js"></script>
+</body>
+</html>

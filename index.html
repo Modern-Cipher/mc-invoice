@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Invoice Verification</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins','ui-sans-serif','system-ui'] },
+          colors: { brand: {600:'#1f6be6',700:'#1a57bf'} },
+          backgroundImage:{ 'brand-gradient':'linear-gradient(135deg,#1a57bf 0%,#1f6be6 45%,#55a7ff 100%)' }
+        }
+      }
+    };
+  </script>
+
+  <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+  
+  <link rel="stylesheet" href="./assets/css/verify.css"/>
+  <link rel="icon" type="image/png" href="./assets/images/mc.png"/>
+
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 transition-colors duration-300">
+
+  <div class="page-container">
+    
+    <div id="status-box" class="status-box">
+      <div id="status-icon-wrapper" class="status-icon-wrapper">
+          <i data-lucide="scan-line" class="w-8 h-8"></i>
+      </div>
+      <div>
+          <h1 id="status-title" class="status-title">Searching for Invoice...</h1>
+          <p id="status-desc" class="status-desc">Please wait while we verify the details from the database.</p>
+      </div>
+    </div>
+
+    <div id="invoice-wrapper" class="hidden">
+      <div class="action-buttons">
+          <button id="printBtn" class="action-btn">
+              <i data-lucide="printer" class="w-4 h-4 mr-2"></i> Print
+          </button>
+          <div class="flex items-center">
+              <i data-lucide="sun" class="w-5 h-5 text-slate-500 dark:text-slate-400"></i>
+              <label for="theme-switch" class="relative inline-flex items-center cursor-pointer mx-2">
+                  <input type="checkbox" id="theme-switch" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-300 dark:bg-slate-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-brand-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-brand-600"></div>
+              </label>
+              <i data-lucide="moon" class="w-5 h-5 text-slate-500 dark:text-slate-400"></i>
+          </div>
+      </div>
+
+      <div id="invoice-sheet" class="relative">
+        <div class="absolute top-[-0.75rem] left-[10px] z-10 bg-brand-gradient p-3 rounded-xl shadow-lg flex items-center gap-3 brand-pill">
+          <img src="./assets/images/mc.png" class="logo-on-header w-10 h-10" alt="Logo">
+          <div id="pCompanyName" class="font-bold text-xl">Modern Cipher</div>
+        </div>
+        <div class="rounded-lg shadow-lg bg-white text-slate-800 dark:bg-slate-800 dark:text-slate-200 min-w-0 pt-6 relative overflow-hidden">
+            
+            <div id="statusStamp" class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center pointer-events-none">
+                </div>
+            <div class="relative z-10"> <div class="absolute top-[20px] right-[20px]">
+                  <h2 class="text-3xl font-bold tracking-wider">INVOICE</h2>
+              </div>
+              
+              <div class="px-6 pb-6 space-y-6 border-b border-slate-200 dark:border-slate-700 text-sm pt-16">
+                  <div class="grid grid-cols-2 gap-6">
+                      <div>
+                          <div class="font-bold mb-1 text-slate-500 dark:text-slate-400">Invoice Number</div>
+                          <div id="pInv" class="opacity-90 font-medium break-words">—</div>
+                      </div>
+                      <div>
+                          <div class="font-bold mb-1 text-slate-500 dark:text-slate-400">Date Issued</div>
+                          <div id="pDate" class="opacity-90 font-medium break-words">—</div>
+                          <div id="pTime" class="opacity-70 text-xs">—</div>
+                      </div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-6">
+                      <div>
+                          <div class="font-bold mb-1 text-slate-500 dark:text-slate-400">Bill To</div>
+                          <div id="pBill" class="whitespace-pre-wrap opacity-90 font-medium break-words">—</div>
+                      </div>
+                      <div>
+                          <div class="font-bold mb-1 text-slate-500 dark:text-slate-400">Recipient</div>
+                          <div id="pRecipient" class="whitespace-pre-wrap opacity-90 font-medium break-words">—</div>
+                      </div>
+                  </div>
+              </div>
+              <div class="p-6">
+                  <table class="w-full text-sm table-fixed">
+                      <thead>
+                          <tr class="border-b border-slate-300 dark:border-slate-600">
+                              <th class="text-left font-semibold p-2 pb-3 w-2/5">Description</th>
+                              <th class="text-right font-semibold p-2 pb-3">Rate</th>
+                              <th class="text-right font-semibold p-2 pb-3">Qty</th>
+                              <th class="text-right font-semibold p-2 pb-3">Amount</th>
+                          </tr>
+                      </thead>
+                      <tbody id="pItems"></tbody>
+                  </table>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-800/50 rounded-b-lg">
+                  <div class="p-6 grid grid-cols-2 gap-6">
+                      <div class="text-sm">
+                          <div class="font-bold mb-2">Payment Information</div>
+                          <div id="pPayment" class="whitespace-pre-wrap opacity-80 break-words">—</div>
+                      </div>
+                      <div class="text-sm text-right">
+                          <div class="w-full space-y-1">
+                              <div class="flex justify-between gap-4"><span class="text-slate-600 dark:text-slate-400">Subtotal</span><span id="pSub" class="font-medium break-words text-right min-w-0">₱0.00</span></div>
+                              <div class="flex justify-between gap-4"><span class="text-slate-600 dark:text-slate-400">Tax</span><span id="pTax" class="font-medium break-words text-right min-w-0">₱0.00</span></div>
+                              <div class="flex justify-between gap-4"><span class="text-slate-600 dark:text-slate-400">Discount</span><span id="pDis" class="font-medium break-words text-right min-w-0">₱0.00</span></div>
+                              <div class="flex justify-between gap-4"><span class="text-slate-600 dark:text-slate-400">Downpayment</span><span id="pDP" class="font-medium break-words text-right min-w-0">₱0.00</span></div>
+                              <div class="flex justify-between font-bold text-base mt-2 pt-2 border-t border-slate-300 dark:border-slate-600"><span>Amount Due</span><span id="pDue" class="break-words text-right min-w-0">₱0.00</span></div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="p-6 grid grid-cols-2 gap-6 border-t border-slate-200 dark:border-slate-700">
+                      <div class="text-sm">
+                          <div class="font-bold mb-2">Notes</div>
+                          <div id="pNotes" class="whitespace-pre-wrap opacity-80 break-words">—</div>
+                      </div>
+                      <div class="flex flex-col items-end justify-end">
+                          <div class="font-bold text-xs mb-2">Scan to Verify</div>
+                          <div class="w-32 h-32 rounded-lg bg-white p-2 flex items-center justify-center shadow-inner">
+                              <img id="pQR" alt="QR Code" src="" style="display:none;"/>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./assets/js/firebase-init.js"></script>
+  <script type="module" src="./assets/js/verify.js"></script>
+</body>
+</html>

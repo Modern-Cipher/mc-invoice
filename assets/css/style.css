@@ -1,0 +1,19 @@
+/* Tailwind does almost everything */
+html, body { height: 100%; }
+.modal-open { overflow: hidden; }
+
+/* Utilities */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.whitespace-pre-wrap { white-space: pre-wrap; }
+.logo-on-header { filter: brightness(0) invert(1); }
+
+/* Tippy themes */
+.tippy-box { font-family: 'Poppins', sans-serif; font-size: 12px; }
+.tippy-box[data-theme~='dark']  { background-color: #1e293b; color: #f1f5f9; }
+.tippy-box[data-theme~='light'] { background-color: #f8fafc; color: #1e293b; border: 1px solid #e2e8f0; }
+
+/* FIX: invoice table alignment & wrapping */
+.invoice-table { table-layout: fixed; }
+.invoice-table th,
+.invoice-table td { word-break: break-word; }

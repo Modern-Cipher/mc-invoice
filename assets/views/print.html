@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Print Invoice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="../../assets/css/print.css">
+  <link rel="icon" type="image/png" href="../../assets/images/mc.png"/>
+</head>
+<body>
+
+  <div class="page-controls print-hide">
+    <button id="printBtn" class="action-btn">
+      <i data-lucide="printer" class="w-5 h-5 mr-2"></i> Print Now
+    </button>
+    <a href="javascript:window.close();" class="action-btn back-btn">
+      <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i> Go Back
+    </a>
+  </div>
+
+  <div class="invoice-container">
+    <div class="invoice-sheet">
+      <div class="invoice-main-content">
+        <div class="header-section">
+          <div class="flex items-center gap-3">
+              <div class="bg-brand-gradient text-white p-3 rounded-lg flex items-center gap-3 shadow">
+                  <img src="../../assets/images/mc.png" class="logo-on-header w-10 h-10" alt="Logo">
+                  <div id="pCompanyName" class="font-semibold text-lg">Modern Cipher</div>
+              </div>
+          </div>
+          <h2 class="text-3xl font-bold tracking-wider text-slate-700">INVOICE</h2>
+        </div>
+
+        <div class="details-section">
+            <div class="flex flex-col gap-4">
+                <div>
+                    <div class="text-xs font-bold text-slate-500">Invoice Number</div>
+                    <div id="pInv" class="font-medium break-words text-sm">—</div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-500">Bill To</div>
+                    <div id="pBill" class="whitespace-pre-wrap font-medium break-words text-sm">—</div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-4 text-left">
+                <div>
+                    <div class="text-xs font-bold text-slate-500">Date Issued</div>
+                    <div id="pDate" class="font-medium break-words text-sm">—</div>
+                    <div id="pTime" class="opacity-70 text-xs">—</div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-500">Recipient</div>
+                    <div id="pRecipient" class="whitespace-pre-wrap font-medium break-words text-sm">—</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-slate-200">
+                <th class="text-left font-semibold p-2 pb-2 w-1/2 text-xs">Description</th>
+                <th class="text-right font-semibold p-2 pb-2 text-xs">Rate</th>
+                <th class="text-right font-semibold p-2 pb-2 text-xs">Qty</th>
+                <th class="text-right font-semibold p-2 pb-2 text-xs">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="pItems"></tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="invoice-footer">
+        <div class="card">
+          <h3 class="card-title">Payment Information</h3>
+          <div class="grid grid-cols-2 gap-4">
+              <div id="pPayment" class="whitespace-pre-wrap opacity-80 break-words text-xs">—</div>
+              <div class="text-sm text-right space-y-1">
+                  <div class="flex justify-between gap-4 text-xs"><span class="text-slate-600">Subtotal</span><span id="pSub" class="font-medium break-words">₱0.00</span></div>
+                  <div class="flex justify-between gap-4 text-xs"><span class="text-slate-600">Tax</span><span id="pTax" class="font-medium break-words">₱0.00</span></div>
+                  <div class="flex justify-between gap-4 text-xs"><span class="text-slate-600">Discount</span><span id="pDis" class="font-medium break-words">₱0.00</span></div>
+                  <div class="flex justify-between gap-4 text-xs"><span class="text-slate-600">Downpayment</span><span id="pDP" class="font-medium break-words">₱0.00</span></div>
+                  <div class="flex justify-between font-bold text-sm mt-2 pt-2 border-t border-slate-300"><span>Amount Due</span><span id="pDue" class="break-words">₱0.00</span></div>
+              </div>
+          </div>
+        </div>
+        <div class="card">
+            <div class="grid grid-cols-2 gap-4 items-start">
+                <div>
+                    <h3 class="card-title">Notes</h3>
+                    <div id="pNotes" class="whitespace-pre-wrap opacity-80 break-words text-xs">—</div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <h3 class="card-title text-right w-full">Scan to Verify</h3>
+                    <div class="w-28 h-28 rounded-lg bg-white p-1.5 flex items-center justify-center">
+                        <img id="pQR" alt="QR Code" src="" style="display:none;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="error-msg" class="hidden text-center p-8">
+    <h1 class="text-2xl font-bold text-red-600">Invoice Not Found</h1>
+  </div>
+
+  <script src="../../assets/js/data.js"></script>
+  <script src="../../assets/js/print.js"></script>
+</body>
+</html>

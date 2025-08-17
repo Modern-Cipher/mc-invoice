@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Modern Cipher — Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins','ui-sans-serif','system-ui'] },
+          colors: { brand: {600:'#1f6be6',700:'#1a57bf'} },
+          backgroundImage:{ 'brand-gradient':'linear-gradient(135deg,#1a57bf 0%,#1f6be6 45%,#55a7ff 100%)' }
+        }
+      }
+    };
+  </script>
+
+  <script src="https://unpkg.com/lucide@0.462.0/dist/umd/lucide.min.js"></script>
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
+  <style>.tippy-box{font-family:'Poppins',sans-serif;font-size:12px;}.tippy-box[data-theme~='dark']{background-color:#1e293b;color:#f1f5f9;}.tippy-box[data-theme~='light']{background-color:#f8fafc;color:#1e293b;border:1px solid #e2e8f0;}</style>
+  
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <link rel="stylesheet" href="../../assets/css/style.css"/>
+  <link rel="icon" type="image/png" href="../../assets/images/mc.png"/>
+</head>
+<body class="font-sans bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
+
+  <div class="flex min-h-screen">
+    <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-40 w-72 transform -translate-x-full md:translate-x-0 transition-transform duration-200 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800">
+      <div class="h-16 flex items-center gap-3 px-5 border-b border-slate-200 dark:border-slate-800">
+        <img src="../../assets/images/mc.png" class="w-8 h-8" alt="MC">
+        <div class="font-semibold">Modern Cipher</div>
+      </div>
+      <nav class="p-3 space-y-1">
+        <a href="./dashboard.html" class="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i><span>Dashboard</span>
+        </a>
+        <a href="./admin.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+          <i data-lucide="table" class="w-5 h-5"></i><span>Invoices</span>
+        </a>
+      </nav>
+      <div class="absolute bottom-0 inset-x-0 p-3 border-t border-slate-200 dark:border-slate-800">
+        <a href="../../index.html" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-tippy-content="Verification page">
+          <i data-lucide="scan-line" class="w-5 h-5"></i> Go to Verify
+        </a>
+        <div class="mt-2 flex items-center justify-between">
+          <span class="text-sm opacity-75">Theme</span>
+          <button id="modeBtn" class="relative w-12 h-7 rounded-full bg-slate-200 dark:bg-slate-800 ring-1 ring-slate-300 dark:ring-slate-700" data-tippy-content="Toggle Dark/Light">
+            <span class="absolute left-0.5 top-0.5 w-6 h-6 rounded-full bg-white dark:bg-slate-900 grid place-items-center shadow transition-transform translate-x-0 dark:translate-x-5">
+              <i data-lucide="sun" class="w-4 h-4 dark:hidden"></i>
+              <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
+            </span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
+
+    <div class="flex-1 min-w-0 flex flex-col">
+      <header class="h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur sticky top-0 z-10">
+        <div class="flex items-center gap-2">
+          <button id="sidebarToggle" class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-tippy-content="Menu">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <h1 class="font-semibold">Dashboard</h1>
+        </div>
+        <a href="./admin.html#new" class="rounded-lg px-4 py-2 text-sm font-semibold bg-brand-600 hover:bg-brand-700 text-white shadow-sm transition-colors" data-tippy-content="Add invoice">
+          <i data-lucide="plus" class="inline w-4 h-4 mr-1"></i>Add Invoice
+        </a>
+      </header>
+
+      <main class="flex-1 w-full p-4 md:p-6">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <div class="text-sm opacity-70 mb-1">Total Invoices</div>
+            <div id="kpiCount" class="text-3xl font-extrabold tracking-tight">...</div>
+          </div>
+          <div class="rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <div class="text-sm opacity-70 mb-1">Total Revenue</div>
+            <div id="kpiGross" class="text-2xl font-bold">...</div>
+          </div>
+          <div class="rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <div class="text-sm opacity-70 mb-1">Total Due</div>
+            <div id="kpiDue" class="text-2xl font-bold">...</div>
+          </div>
+          <div class="rounded-xl p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <div class="text-sm opacity-70 mb-1">Avg. Invoice Value</div>
+            <div id="kpiAvg" class="text-2xl font-bold">...</div>
+          </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <div class="lg:col-span-3 rounded-xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <h3 class="font-semibold mb-4">Monthly Revenue</h3>
+                <div id="salesChart" class="min-h-[300px]"></div>
+            </div>
+            <div class="lg:col-span-2 rounded-xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <h3 class="font-semibold mb-4">Top Services by Quantity</h3>
+                <div id="servicesChart" class="min-h-[300px]"></div>
+            </div>
+        </div>
+      </main>
+
+      <footer class="py-4 text-center text-xs opacity-75 border-t border-slate-200 dark:border-slate-800">
+        Developed by Menard Dela Cruz | Modern Cipher
+      </footer>
+    </div>
+  </div>
+
+  <script type="module" src="../../assets/js/firebase-init.js"></script>
+  <script type="module" src="../../assets/js/dashboard.js"></script>
+  <script src="../../assets/js/tippy-init.js"></script>
+</body>
+</html>

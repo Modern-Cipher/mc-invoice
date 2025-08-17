@@ -1,0 +1,163 @@
+/* ==================================== */
+/* ===== SCREEN STYLES (LIGHT/DARK) ===== */
+/* ==================================== */
+
+body { font-family: 'Poppins', sans-serif; }
+.page-container { max-width: 900px; margin: 2rem auto; padding: 1rem; }
+.status-box { display: flex; align-items: center; gap: 1rem; padding: 1.25rem; border-radius: 0.75rem; margin-bottom: 2rem; border: 1px solid transparent; transition: background-color 0.3s, border-color 0.3s; }
+.status-icon-wrapper { flex-shrink: 0; width: 3.5rem; height: 3.5rem; display: grid; place-items: center; border-radius: 9999px; }
+.status-title { font-weight: 600; font-size: 1.125rem; }
+.status-desc { font-size: 0.875rem; color: #475569; }
+
+/* Verified Style (Green) */
+.status-box.verified { background-color: #f0fdf4; border-color: #bbf7d0; }
+.status-box.verified .status-icon-wrapper { background-color: #22c55e; color: white; }
+.status-box.verified .status-title { color: #166534; }
+.status-box.verified .status-desc { color: #15803d; }
+.dark .status-box.verified { background-color: #16653420; border-color: #22c55e80; }
+.dark .status-box.verified .status-title { color: #86efac; }
+.dark .status-box.verified .status-desc { color: #4ade80; }
+
+/* Invalid Style (Red) */
+.status-box.invalid { background-color: #fef2f2; border-color: #fecaca; }
+.status-box.invalid .status-icon-wrapper { background-color: #ef4444; color: white; }
+.status-box.invalid .status-title { color: #991b1b; }
+.status-box.invalid .status-desc { color: #b91c1c; }
+.dark .status-box.invalid { background-color: #991b1b20; border-color: #ef444480; }
+.dark .status-box.invalid .status-title { color: #fca5a5; }
+.dark .status-box.invalid .status-desc { color: #f87171; }
+
+.action-buttons { display: flex; justify-content: flex-end; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.action-btn { 
+    display: flex; align-items: center; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;
+    background-color: white; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; color: #334155;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+.action-btn:hover { background-color: #f8fafc; border-color: #cbd5e1; }
+.dark .action-btn {
+    background-color: #334155;
+    border-color: #475569;
+    color: #e2e8f0;
+}
+.dark .action-btn:hover {
+    background-color: #475569;
+}
+.whitespace-pre-wrap { white-space: pre-wrap; }
+
+/* ===== BAGONG DAGDAG PARA SA ROUNDED CORNER NG LOGO ===== */
+.logo-on-header {
+    filter: brightness(0) invert(1);
+    /* Itugma ang radius sa parent na may .rounded-xl (0.75rem) */
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+}
+
+/* ===== FORCE WHITE TEXT SA PILL (SCREEN) ===== */
+#invoice-sheet .brand-pill,
+#invoice-sheet .brand-pill * {
+  color: #ffffff !important;
+}
+#invoice-sheet .brand-pill .logo-on-header {
+  filter: brightness(0) invert(1) !important;
+}
+
+
+/* =================================================================== */
+/* ===== FINAL PRINT STYLES - ISANG BAGSAKAN NA AYOS ===== */
+/* =================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0.25in;
+  }
+
+  /* Itago ang mga hindi kailangan */
+  .status-box,
+  .action-buttons {
+    display: none !important;
+  }
+  
+  /* Utos sa buong page na i-print ang mga kulay */
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: #ffffff !important;
+  }
+  
+  /* Pilitin ang buong invoice sheet na maging black text on white background */
+  #invoice-sheet > div {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  /* Pilitin ang ilalim na sections na maging transparent ang background */
+  #invoice-sheet .bg-slate-50, 
+  #invoice-sheet .dark\:bg-slate-800\/50 {
+    background-color: transparent !important;
+  }
+
+  /* Ibalik sa gray ang kulay ng sub-headings */
+  #invoice-sheet .text-slate-500,
+  #invoice-sheet .text-slate-600 {
+    color: #64748b !important;
+  }
+  
+  /* Brute-force na pag-apply ng kulay sa header pill */
+  #invoice-sheet .brand-pill {
+    background: linear-gradient(135deg, #1a57bf 0%, #1f6be6 45%, #55a7ff 100%) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Pilitin ang text at lahat ng nasa loob ng pill na maging PUTI */
+  #invoice-sheet .brand-pill,
+  #invoice-sheet .brand-pill * {
+    color: #ffffff !important;
+  }
+  
+  /* Pilitin ang LOGO sa loob ng pill na maging PUTI */
+  #invoice-sheet .brand-pill .logo-on-header {
+    filter: brightness(0) invert(1) !important;
+  }
+}
+
+/* ==================================== */
+/* ===== STATUS STAMP STYLES  ===== */
+/* ==================================== */
+
+.status-stamp {
+    font-size: 4.5rem; /* Laki ng text */
+    font-weight: 800; /* Kapal ng text */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 2.5rem;
+    border: 7px double; /* Border para magmukhang selyo */
+    border-radius: 0.5rem;
+    opacity: 0.15; /* Para medyo transparent */
+    transform: rotate(-15deg); /* Nakatagilid */
+    pointer-events: none; /* Hindi mahahawakan ng mouse */
+    user-select: none; /* Hindi mase-select ang text */
+}
+
+.status-stamp.paid {
+    color: #166534; /* Dark Green */
+    border-color: #166534;
+}
+
+.status-stamp.unpaid {
+    color: #991b1b; /* Dark Red */
+    border-color: #991b1b;
+}
+
+@media print {
+    #statusStamp {
+        display: flex !important;
+    }
+    .status-stamp {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        opacity: 0.1 !important; /* Mas transparent kapag i-print */
+    }
+}
